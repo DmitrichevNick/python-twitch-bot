@@ -8,6 +8,7 @@ pylint = "*"
 
 [packages]
 twitchio = "*"
+youtube-dl = "*"
 
 [requires]
 python_version = "3.7"

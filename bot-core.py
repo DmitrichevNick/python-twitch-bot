@@ -1,6 +1,7 @@
 import config
 import random
 from twitchio.ext import commands
+import functions
 
 bot = commands.Bot(
     irc_token=config.TMI_TOKEN,
@@ -38,6 +39,10 @@ async def roll(ctx):
     else:
         await ctx.channel.send(f"{ctx.author.name} rolled a {random.randrange(0,100,1)}!")
  
+@bot.command(name='melody')
+async def roll(ctx):
+    link = ctx.content.split(' ')[1]
+    functions.download_youtube_song(link)
 
 if __name__ == "__main__":
     bot.run()
