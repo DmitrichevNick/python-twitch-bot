@@ -12,6 +12,11 @@ def download_youtube_song(url):
                     'preferredquality': '192',
                 }]}
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info('https://www.youtube.com/watch?v=TL470fJMi7w', download=False)
+        print(url)
+        if not "youtube.com" in url: 
+            return "ээээээээээээ"
+        info = ydl.extract_info(url, download=False)
         duration = info.get("duration", None)
+        if duration > 300: 
+            return "ээээээээээээ"
         ydl.download([url])

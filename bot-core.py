@@ -42,7 +42,9 @@ async def roll(ctx):
 @bot.command(name='melody')
 async def roll(ctx):
     link = ctx.content.split(' ')[1]
-    functions.download_youtube_song(link)
+    result = functions.download_youtube_song(link)
+    if result is not None and len(result) > 0:
+        await ctx.channel.send(f"{ctx.author.name} {result}!")
 
 if __name__ == "__main__":
     bot.run()
