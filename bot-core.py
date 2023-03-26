@@ -12,12 +12,12 @@ nest_asyncio.apply()
 
 class Bot(commands.Bot):
     def __init__(self):
-        super().__init__(token=config.TMI_TOKEN, prefix=config.BOT_PREFIX, initial_channels=config.CHANNEL)
+        super().__init__(token=config.MAIN_TMI_TOKEN, prefix=config.BOT_PREFIX, initial_channels=config.CHANNEL)
 
     async def event_ready(self):
         print(f"{self.nick} родился")
         
-    @commands.command(name='roll')
+    #@commands.command(name='roll')
     async def roll(self, ctx: commands.Context):
         print('roll')
         message_text = ctx.message.content
@@ -41,7 +41,7 @@ class Bot(commands.Bot):
         message_collector.start()
         message_collector.listen_input(self.connected_channels[0])
            
-    @commands.command(name='melody')
+    #@commands.command(name='melody')
     async def melody(self, ctx: commands.Context):
         link = ctx.message.content.split(' ')[1]
         result = functions.download_youtube_song(link)
