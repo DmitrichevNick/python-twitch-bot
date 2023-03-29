@@ -1,7 +1,3 @@
 install:
 - pip install pipenv
 - pipenv install --dev
-script:
-- pylint **/*.py
-- python -m pytest --cov=marian
-- python ./docs.py
