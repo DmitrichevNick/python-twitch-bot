@@ -1,6 +1,7 @@
 from datetime import datetime
 import asyncio
 from socket import timeout
+from threading import Event, Thread
 import time
 from twitchio import Channel
 
@@ -43,12 +44,38 @@ class MessageCollector():
                 if len(self.messages) == 0:
                     continue
                 
+                delay = float(words[1] if len(words) > 1 else 1)
                 tasks = []
                 for message in self.messages:
                     tasks.append(loop.create_task(chat.send(message)))
-                    tasks.append(loop.create_task(self.asyncSleep(1)))
+                    tasks.append(loop.create_task(self.asyncSleep(delay)))
                 loop.run_until_complete(asyncio.wait(tasks))
-                loop.run_until_complete(loop.create_task(self.clear()))
+                #loop.run_until_complete(loop.create_task(self.clear()))
+            elif words[0].lower() == 'spam':  
+                if len(self.messages) == 0:
+                    continue
+                
+                delay = float(words[1] if len(words) > 1 else 1)
+                spam_delay = float(words[2] if len(words) > 2 else 15)
+                def spammer(e):
+                    while not e.is_set():
+                        tasks = []
+                        for message in self.messages:
+                            tasks.append(loop.create_task(chat.send(message)))
+                            tasks.append(loop.create_task(self.asyncSleep(delay)))
+                        loop.run_until_complete(asyncio.wait(tasks))
+                        time.sleep(spam_delay)
+                event = Event()
+                spammer_thread = Thread(target=spammer, args=(event,))
+                spammer_thread.start()
+                while True:
+                    spam_message = input()
+                    if spam_message == 'stop':
+                        event.set()
+                        spammer_thread.join()
+                        break
+
+                #loop.run_until_complete(loop.create_task(self.clear()))
             elif words[0].lower() == 'sys:exit':
                 loop.close()
                 quit()
